@@ -13,10 +13,10 @@
 * |--------+------+------+------+------+------|                           |------+------+------+------+------+--------|
 * | Shift  |   Z  |   X  |   C  |   V  |   B  |                           |   N  |   M  |  ,.  |  .>  |  /?  | Shift  |
 * `--------+------+------+------+------+-------                           `------+------+------+------+------+--------'
-*          | `~   | Ins  | Left | Right|                                         | Up   | Down |  [{  |  ]}  |
+*          | `~   | Ins  | Left | Right|                                         | Down |  Up  |  [{  |  ]}  |
 *          `---------------------------'                                         `---------------------------'
 *                                        ,-------------.         ,-------------.
-*                                        | Ctrl | Alt  |         | Gui  | Ctrl |
+*                                        | Shift| Gui  |         | Alt  | Ctrl |
 *                                 ,------|------|------|         |------+------+------.
 *                                 |      |      | Home |         | PgUp |      |      |
 *                                 | BkSp | Del  |------|         |------|Return| Space|
@@ -28,7 +28,7 @@
 * ,-------------------------------------------------------------------------------------------------------------------.
 * |   Esc  |  F1  |  F2  |  F3  |  F4  |  F5  |  F6  |  F8  |  F9  |  F10 |  F12 | PSCR | SLCK | PAUS | KP   | PGM    |
 * |--------+------+------+------+------+------+---------------------------+------+------+------+------+------+--------|
-* | TRNS   |  NO  |  NO  |  NO  |  NO  |  NO  |                           |  NO  |  NumL|   =  |   /  |   *  | TRNS   |
+* |   Esc  |  NO  |  NO  |  NO  |  NO  |  NO  |                           |  NO  |  NumL|   =  |   /  |   *  | TRNS   |
 * |--------+------+------+------+------+------|                           +------+------+------+------+------+--------|
 * | TRNS   |  NO  |  NO  |  NO  |  NO  | Vol+ |                           | Next |   7  |   8  |   9  |   -  | TRNS   |
 * |--------+------+------+------+------+------|                           |------+------+------+------+------+--------|
@@ -36,7 +36,7 @@
 * |--------+------+------+------+------+------|                           |------+------+------+------+------+--------|
 * | TRNS   | PgDn | Left | Down | Right| Vol- |                           | Prev |   1  |   2  |   3  | KEnt | TRNS   |
 * `--------+------+------+------+------+------'                           `------+------+------+------+------+--------'
-*          |  TRNS| TRNS | Home | End  |                                         | PgUp | PgDn |   .  | KEnt |
+*          |  \   | M LB | M Lt | M Rt |                                         | M Dn | M Up | M RB |  NO  |
 *          `---------------------------'                                         `---------------------------'
 *                                        ,-------------.         ,-------------.
 *                                        | TRNS | TRNS |         | TRNS | =    |
@@ -52,13 +52,13 @@
 static const uint8_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     /* Layer 0: Default */
     KEYMAP(
-           ESC,F1  ,F2  ,F3  ,F4  ,F5  ,F6  ,F7  ,F8,
+           NO,  NO  ,NO  ,NO  ,NO  ,NO  ,NO  ,NO  ,NO,
            EQL, 1   ,2   ,3   ,4   ,5   ,
            TAB, Q   ,W   ,E   ,R   ,T   ,
            CAPS,A   ,S   ,D   ,F   ,G   ,
            LSFT,Z   ,X   ,C   ,V   ,B   ,
                 GRV ,INS ,LEFT,RGHT,
-                               LCTL,LALT,
+                               FN0,RGUI,
                                     HOME,
                           BSPC,DEL ,END ,
            F9  ,F10 ,F11 ,F12 ,PSCR,SLCK,PAUS,FN1 ,FN0 ,
@@ -66,26 +66,26 @@ static const uint8_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
            Y   ,U   ,I   ,O   ,P   ,BSLS,
            H   ,J   ,K   ,L   ,SCLN,QUOT,
            N   ,M   ,COMM,DOT ,SLSH,RSFT,
-                UP  ,DOWN,LBRC,RBRC,
-           RGUI,RCTL,
+                DOWN  ,UP,LBRC,RBRC,
+           LALT,LCTL,
            PGUP,
            PGDN,ENT ,SPC
     ),
     /* Layer 1: Symbols */
     KEYMAP(
-           ESC ,F1  ,F2  ,F3  ,F4  ,F5  ,F6  ,F7  ,F8,
-           TRNS,NO  ,NO  ,NO  ,NO  ,NO  ,
+           TRNS,TRNS,TRNS,TRNS,TRNS,TRNS,TRNS,TRNS,TRNS,
+           ESC, F1  ,F2  ,F3  ,F4  ,F5  ,
            TRNS,NO  ,NO  ,NO  ,NO  ,VOLU,
-           NO  ,PGUP,HOME,UP  ,END ,MUTE,
+           NO  ,PGUP,BTN1,BTN2,BTN3 ,MUTE,
            TRNS,PGDN,LEFT,DOWN,RGHT,VOLD,
                 LCTL,HOME,END ,TRNS,
                           TRNS,TRNS,
                                TRNS,
                      TRNS,TRNS,TRNS,
            F9  ,F10 ,F11 ,F12 ,PSCR,SLCK,PAUS,FN1 ,FN0 ,
-           F6  ,NLCK,PEQL,PSLS,PAST,TRNS,
-           MNXT,P7  ,P8  ,P9  ,PMNS,TRNS,
-           MPLY,P4  ,P5  ,P6  ,PPLS,TRNS,
+           F6  ,F7  ,F8,  F9,  F10, F11,
+           MNXT,P7  ,MS_U,P9  ,PMNS,TRNS,
+           MPLY,MS_L,MS_D,MS_R,PPLS,TRNS,
            MPRV,P1  ,P2  ,P3  ,PENT,TRNS,
                 PGUP,PGDN,PDOT,PENT,
            TRNS,PEQL,
@@ -96,8 +96,7 @@ enum function_id {
     BOOTLOAD_KEY,
 };
 static const uint16_t PROGMEM fn_actions[] = {
-		[0] = ACTION_FUNCTION(BOOTLOAD_KEY),
-		[1] = ACTION_LAYER_TOGGLE(1),
+    [0] = ACTION_LAYER_MOMENTARY(1),
 };
 void action_function(keyrecord_t *event, uint8_t id, uint8_t opt) {
     if (id == BOOTLOAD_KEY) {

@@ -33,6 +33,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 /* define if matrix has ghost */
 //#define MATRIX_HAS_GHOST
 
+#define MOUSEKEY_DELAY          100
+#define MOUSEKEY_INTERVAL       20
+#define MOUSEKEY_MAX_SPEED      3
+#define MOUSEKEY_TIME_TO_MAX    10
+
 /* Set 0 if debouncing isn't needed */
 #define DEBOUNCE        5
 #define TAPPING_TERM    250
